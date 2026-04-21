@@ -1,0 +1,132 @@
+.shell {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-template-rows: 1fr;
+}
+
+.canvasWrap {
+  position: absolute;
+  inset: 0;
+}
+
+.debugBadge {
+  position: fixed;
+  left: 12px;
+  bottom: 12px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(216, 192, 138, 0.35);
+  color: #f8fafc;
+  font-size: 12px;
+  letter-spacing: 0.2px;
+  pointer-events: none;
+}
+
+.integrityBtn {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: rgba(37, 99, 235, 0.85);
+  border: 1px solid rgba(59, 130, 246, 0.5);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  text-decoration: none;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+}
+
+.integrityBtn:hover {
+  background: rgba(37, 99, 235, 0.95);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.endWrap {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.endBackdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  pointer-events: auto;
+}
+
+.endPanel {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(820px, calc(100vw - 32px));
+  background: rgba(10, 12, 18, 0.92);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.5);
+  border-radius: 16px;
+  padding: 18px;
+  pointer-events: auto;
+}
+
+.endTitle {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  margin-bottom: 6px;
+}
+
+.endMuted {
+  color: #94a3b8;
+}
+
+.endGrid {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.endRow {
+  margin-top: 14px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.endBtn,
+.endBtnPrimary {
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(30, 41, 59, 0.35);
+  color: #e5e7eb;
+  border-radius: 12px;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.endBtnPrimary {
+  border-color: rgba(34, 197, 94, 0.35);
+  background: rgba(34, 197, 94, 0.16);
+}
+
+.endBtn:hover {
+  background: rgba(30, 41, 59, 0.55);
+}
+
+.endBtnPrimary:hover {
+  background: rgba(34, 197, 94, 0.22);
+}
+
+@media (max-width: 680px) {
+  .endGrid {
+    grid-template-columns: 1fr;
+  }
+}

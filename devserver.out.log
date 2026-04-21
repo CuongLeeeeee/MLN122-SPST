@@ -1,0 +1,41 @@
+
+> bao-tang-lich-su@0.1.0 dev
+> next dev
+
+▲ Next.js 16.1.1 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.8:3000
+- Environments: .env.local, .env
+
+✓ Starting...
+✓ Ready in 857ms
+ GET / 200 in 2.3s (compile: 2.2s, render: 147ms)
+SHEETS_ENDPOINT: https://script.google.com/macros/s/AKfycbyNRbKWiMiFUi2V_ZK7zVHuDRbdyOwcbQ1RExDknXLodfxNMlwEc-U8uCbbWt_EKSZP/exec
+ POST /api/score 400 in 67ms (compile: 49ms, render: 18ms)
+SHEETS_ENDPOINT: https://script.google.com/macros/s/AKfycbyNRbKWiMiFUi2V_ZK7zVHuDRbdyOwcbQ1RExDknXLodfxNMlwEc-U8uCbbWt_EKSZP/exec
+Received payload: {
+  "playerName": "debug-test",
+  "score": 123,
+  "timestamp": "2026-01-15T00:00:00.000Z",
+  "mapId": "map1"
+}
+Webhook response status: 200
+Webhook response body: {"status":"error","message":"Exception: Unexpected error while getting the method or property openById on object SpreadsheetApp."}
+ POST /api/score 200 in 2.1s (compile: 3ms, render: 2.1s)
+[api/score][b803e506-1b1e-4d71-acd9-705efd008d5e] POST content-type=application/json content-length=93
+[api/score][b803e506-1b1e-4d71-acd9-705efd008d5e] endpointConfigured=true endpoint=https://script.google.com/s/AKfycbyNRbKWiMiFUi2V_ZK7zVHuDRbdyOwcbQ1RExDknXLodfxNMlwEc-U8uCbbWt_EKSZP/exec
+[api/score][b803e506-1b1e-4d71-acd9-705efd008d5e] Received JSON payload (len=93): {"playerName":"debug-test","score":123,"timestamp":"2026-01-15T00:00:00.000Z","mapId":"map1"}
+[api/score][b803e506-1b1e-4d71-acd9-705efd008d5e] Upstream responded status=200 ok=true elapsedMs=1815 content-type=application/json; charset=utf-8
+[api/score][b803e506-1b1e-4d71-acd9-705efd008d5e] Upstream body (snippet): {"status":"error","message":"Exception: Unexpected error while getting the method or property openById on object SpreadsheetApp."}
+ POST /api/score 200 in 1888ms (compile: 28ms, render: 1860ms)
+[api/score][671f426a-0461-4d37-aad2-72b7a6642499] POST content-type=application/json content-length=93
+[api/score][671f426a-0461-4d37-aad2-72b7a6642499] endpointConfigured=true endpoint=https://script.google.com/s/AKfycbyNRbKWiMiFUi2V_ZK7zVHuDRbdyOwcbQ1RExDknXLodfxNMlwEc-U8uCbbWt_EKSZP/exec
+[api/score][671f426a-0461-4d37-aad2-72b7a6642499] Received JSON payload (len=93): {"playerName":"debug-test","score":123,"timestamp":"2026-01-15T00:00:00.000Z","mapId":"map1"}
+[api/score][671f426a-0461-4d37-aad2-72b7a6642499] Upstream responded status=200 ok=false elapsedMs=1877 content-type=application/json; charset=utf-8
+ POST /api/score 200 in 1965ms (compile: 41ms, render: 1925ms)
+  Reload env: .env.local
+  Reload env: .env.local
+  Reload env: .env.local
+  Reload env: .env.local
+  Reload env: .env
+ GET / 200 in 107ms (compile: 45ms, render: 63ms)
