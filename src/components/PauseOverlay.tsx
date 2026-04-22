@@ -46,36 +46,48 @@ export function PauseOverlay(props: {
             </div>
             <div style={{ display: "grid", gap: 10 }}>
               <label style={{ display: "grid", gap: 6 }}>
-                <span className={styles.muted}>Master: {Math.round(props.volume.master * 100)}%</span>
+                <span className={styles.muted}>
+                  Master: {Math.round(props.volume.master * 100)}%
+                </span>
                 <input
                   type="range"
                   min={0}
                   max={1}
                   step={0.01}
                   value={props.volume.master}
-                  onChange={(e) => props.onChangeVolume({ master: Number(e.target.value) })}
+                  onChange={(e) =>
+                    props.onChangeVolume({ master: Number(e.target.value) })
+                  }
                 />
               </label>
               <label style={{ display: "grid", gap: 6 }}>
-                <span className={styles.muted}>Music: {Math.round(props.volume.music * 100)}%</span>
+                <span className={styles.muted}>
+                  Music: {Math.round(props.volume.music * 100)}%
+                </span>
                 <input
                   type="range"
                   min={0}
                   max={1}
                   step={0.01}
                   value={props.volume.music}
-                  onChange={(e) => props.onChangeVolume({ music: Number(e.target.value) })}
+                  onChange={(e) =>
+                    props.onChangeVolume({ music: Number(e.target.value) })
+                  }
                 />
               </label>
               <label style={{ display: "grid", gap: 6 }}>
-                <span className={styles.muted}>SFX: {Math.round(props.volume.sfx * 100)}%</span>
+                <span className={styles.muted}>
+                  SFX: {Math.round(props.volume.sfx * 100)}%
+                </span>
                 <input
                   type="range"
                   min={0}
                   max={1}
                   step={0.01}
                   value={props.volume.sfx}
-                  onChange={(e) => props.onChangeVolume({ sfx: Number(e.target.value) })}
+                  onChange={(e) =>
+                    props.onChangeVolume({ sfx: Number(e.target.value) })
+                  }
                 />
               </label>
             </div>
@@ -94,7 +106,7 @@ export function PauseOverlay(props: {
               </div>
               <div className={styles.row}>
                 {props.availableMaps.map((id) => {
-                  const label = id === 1 ? "Tầng 1" : id === 2 ? "Tầng 2" : "Tầng 3";
+                  const label = id === 1 ? "Tầng 1" : "Tầng 2";
                   const isCurrent = id === props.currentMapId;
                   return (
                     <button
@@ -102,7 +114,9 @@ export function PauseOverlay(props: {
                       className={styles.btn}
                       disabled={isCurrent}
                       onClick={() => props.onJumpToMap(id)}
-                      title={isCurrent ? "Bạn đang ở tầng này" : `Đi đến ${label}`}
+                      title={
+                        isCurrent ? "Bạn đang ở tầng này" : `Đi đến ${label}`
+                      }
                     >
                       {label}
                     </button>
@@ -121,14 +135,15 @@ export function PauseOverlay(props: {
                 Quay lại màn trước
               </button>
             ) : null}
-            <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={props.onResume}>
+            <button
+              className={`${styles.btn} ${styles.btnPrimary}`}
+              onClick={props.onResume}
+            >
               Tiếp tục
             </button>
           </div>
 
-          <div className={styles.muted}>
-            Tip: Tab bị ẩn sẽ tự pause.
-          </div>
+          <div className={styles.muted}>Tip: Tab bị ẩn sẽ tự pause.</div>
         </div>
       </div>
     </div>

@@ -1,7 +1,14 @@
 "use client";
 
 //UI
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import Link from "next/link";
 import styles from "@/app/page.module.css";
 import { GameCanvas, type GameCanvasHandle } from "@/components/GameCanvas";
 import { StartOverlay, type StartChoice } from "@/components/StartOverlay";
@@ -10,6 +17,7 @@ import { PauseOverlay } from "@/components/PauseOverlay";
 import { QuizModal } from "@/components/QuizModal";
 import { FlipbookModal } from "@/components/FlipbookModal";
 import { FrameModal } from "@/components/FrameModal";
+import { PracticeQuizModal } from "@/components/PracticeQuizModal";
 
 import { AudioSystem } from "@/game/audio/Audio";
 import {
@@ -24,7 +32,12 @@ import {
 import { QUIZ_QUESTIONS, type QuizId } from "@/data/questions";
 
 type ActiveQuiz = { quizId: QuizId; title: string; openId: number } | null;
-type ActiveFrame = { frameId: string; title: string; imageSrc?: string; openId: number } | null;
+type ActiveFrame = {
+  frameId: string;
+  title: string;
+  imageSrc?: string;
+  openId: number;
+} | null;
 
 function fmtMs(ms: number) {
   const s = Math.max(0, Math.round(ms / 1000));
@@ -47,7 +60,11 @@ async function postScore(payload: Record<string, unknown>, debug = false) {
     // Best-effort logging: only warn if proxy reports failure.
     if (!res.ok) {
       const text = await res.text().catch(() => "");
-      console.warn("[score] POST /api/score failed", { status: res.status, body: text, payload });
+      console.warn("[score] POST /api/score failed", {
+        status: res.status,
+        body: text,
+        payload,
+      });
       return;
     }
 
@@ -90,6 +107,8 @@ export function GamePage() {
 
   const [activeQuiz, setActiveQuiz] = useState<ActiveQuiz>(null);
   const [activeFlipbookId, setActiveFlipbookId] = useState<string | null>(null);
+  const [showPracticeQuiz, setShowPracticeQuiz] = useState(false);
+  const [practiceQuizOpenId, setPracticeQuizOpenId] = useState(0);
   const [activeFrame, setActiveFrame] = useState<ActiveFrame>(null);
 
   const [endgame, setEndgame] = useState(false);
@@ -102,7 +121,12 @@ export function GamePage() {
     (base: SaveStateV1) => {
       const st = gameRef.current?.getState();
       if (!st) return base;
-      const next: SaveStateV1 = { ...base, mapId: st.mapId, px: st.px, py: st.py };
+      const next: SaveStateV1 = {
+        ...base,
+        mapId: st.mapId,
+        px: st.px,
+        py: st.py,
+      };
       writeSave(next);
       setSave(next);
       setSaveExists(true);
@@ -164,7 +188,7 @@ export function GamePage() {
       // close modal + advance
       setActiveQuiz(null);
 
-      if (res.quizId === "map1" || res.quizId === "map2") {
+      if (res.quizId === "map1") {
         gameRef.current?.advanceMap();
         next = syncSaveFromGame(next);
       } else {
@@ -172,26 +196,34 @@ export function GamePage() {
         next = syncSaveFromGame(next);
         setEndgame(true);
 
-        await postScore({
-          kind: "score",
-          playerName: next.playerName,
-          totalTimeMs: next.score.totalTimeMs,
-          attempts: next.score.attempts,
-          at: new Date().toISOString(),
-        }, debugSkipQuiz);
+        await postScore(
+          {
+            kind: "score",
+            playerName: next.playerName,
+            totalTimeMs: next.score.totalTimeMs,
+            attempts: next.score.attempts,
+            at: new Date().toISOString(),
+          },
+          debugSkipQuiz,
+        );
       }
 
       writeSave(next);
       setSave(next);
       setSaveExists(true);
     },
-    [save, syncSaveFromGame],
+    [debugSkipQuiz, save, syncSaveFromGame],
   );
 
   const callbacks = useMemo(
     () => ({
       onRequestFlipbook: (flipbookId: string, _title: string) => {
         void _title;
+        if (flipbookId === "m3-kho-de") {
+          setPracticeQuizOpenId(Date.now());
+          setShowPracticeQuiz(true);
+          return;
+        }
         setActiveFlipbookId(flipbookId);
       },
       onRequestQuiz: (quizId: QuizId, title: string) => {
@@ -225,7 +257,10 @@ export function GamePage() {
         setDebugSkipQuiz((prev) => {
           const next = !prev;
           try {
-            window.localStorage.setItem("btls_debug_skip_quiz", next ? "1" : "0");
+            window.localStorage.setItem(
+              "btls_debug_skip_quiz",
+              next ? "1" : "0",
+            );
           } catch {
             // ignore
           }
@@ -238,12 +273,31 @@ export function GamePage() {
   }, []);
 
   useEffect(() => {
-    const shouldPause = paused || showHelp || !!activeQuiz || !!activeFlipbookId || !!activeFrame || endgame;
+    const shouldPause =
+      paused ||
+      showHelp ||
+      !!activeQuiz ||
+      !!activeFlipbookId ||
+      showPracticeQuiz ||
+      !!activeFrame ||
+      endgame;
     gameRef.current?.setPaused(shouldPause);
-  }, [paused, showHelp, activeQuiz, activeFlipbookId, activeFrame, endgame]);
+  }, [
+    paused,
+    showHelp,
+    activeQuiz,
+    activeFlipbookId,
+    showPracticeQuiz,
+    activeFrame,
+    endgame,
+  ]);
 
   const closeFlipbook = useCallback(() => {
     setActiveFlipbookId(null);
+  }, []);
+
+  const closePracticeQuiz = useCallback(() => {
+    setShowPracticeQuiz(false);
   }, []);
 
   const closeFrame = useCallback(() => {
@@ -279,11 +333,9 @@ export function GamePage() {
   const unlockedMaps = useMemo<MapId[]>(() => {
     const completed = save?.completed ?? {};
     let max: MapId = 1;
-    if (completed.map1) max = 2;
-    if (completed.map2) max = 3;
+    if (completed.map1) max = 3;
     if (max === 1) return [1];
-    if (max === 2) return [1, 2];
-    return [1, 2, 3];
+    return [1, 3];
   }, [save]);
 
   const onJumpToMap = useCallback(
@@ -329,6 +381,7 @@ export function GamePage() {
     setPaused(false);
     setActiveQuiz(null);
     setActiveFlipbookId(null);
+    setShowPracticeQuiz(false);
     gameRef.current?.setState(s.mapId, s.px, s.py);
   }, [save?.playerName]);
 
@@ -337,15 +390,23 @@ export function GamePage() {
   return (
     <div className={styles.shell}>
       <div className={styles.canvasWrap}>
-        {started ? <GameCanvas ref={gameRef} initial={initial} callbacks={callbacks} /> : null}
+        {started ? (
+          <GameCanvas ref={gameRef} initial={initial} callbacks={callbacks} />
+        ) : null}
       </div>
 
-      {debugSkipQuiz ? <div className={styles.debugBadge}>DEBUG: Skip quiz</div> : null}
+      {debugSkipQuiz ? (
+        <div className={styles.debugBadge}>DEBUG: Skip quiz</div>
+      ) : null}
 
       {started ? (
-        <a href="/academic-integrity" className={styles.integrityBtn} title="Xem báo cáo liêm chính học thuật">
+        <Link
+          href="/academic-integrity"
+          className={styles.integrityBtn}
+          title="Xem báo cáo liêm chính học thuật"
+        >
           📋 Liêm chính học thuật
-        </a>
+        </Link>
       ) : null}
 
       <StartOverlay
@@ -381,6 +442,15 @@ export function GamePage() {
         onClose={closeFlipbook}
       />
 
+      <PracticeQuizModal
+        key={practiceQuizOpenId}
+        visible={showPracticeQuiz}
+        onClose={closePracticeQuiz}
+        onSfxSelect={() => audio.playQuizSelect()}
+        onSfxCorrect={() => audio.playQuizCorrect()}
+        onSfxWrong={() => audio.playQuizWrong()}
+      />
+
       {activeFrame ? (
         <FrameModal
           key={activeFrame.openId}
@@ -401,6 +471,9 @@ export function GamePage() {
           questions={QUIZ_QUESTIONS[activeQuiz.quizId]}
           onClose={closeQuiz}
           onComplete={onQuizComplete}
+          onSfxSelect={() => audio.playQuizSelect()}
+          onSfxCorrect={() => audio.playQuizCorrect()}
+          onSfxWrong={() => audio.playQuizWrong()}
         />
       ) : null}
 
@@ -421,7 +494,10 @@ export function GamePage() {
             </div>
 
             <div className={styles.endRow}>
-              <button className={styles.endBtn} onClick={() => setEndgame(false)}>
+              <button
+                className={styles.endBtn}
+                onClick={() => setEndgame(false)}
+              >
                 Quay lại bảo tàng
               </button>
               <button className={styles.endBtnPrimary} onClick={onRestart}>

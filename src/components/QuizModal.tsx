@@ -42,12 +42,21 @@ export function QuizModal(props: {
   title: string;
   questions: Question[];
   onClose: () => void;
-  onComplete: (result: { quizId: QuizId; totalTimeMs: number; attempts: number }) => void;
+  onComplete: (result: {
+    quizId: QuizId;
+    totalTimeMs: number;
+    attempts: number;
+  }) => void;
+  onSfxSelect?: () => void;
+  onSfxCorrect?: () => void;
+  onSfxWrong?: () => void;
 }) {
   const [attempts, setAttempts] = useState(1);
   const [startMs] = useState(() => Date.now());
 
-  const [attemptQs, setAttemptQs] = useState<ShuffledQuestion[]>(() => buildAttempt(props.questions));
+  const [attemptQs, setAttemptQs] = useState<ShuffledQuestion[]>(() =>
+    buildAttempt(props.questions),
+  );
   const [idx, setIdx] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
@@ -57,22 +66,28 @@ export function QuizModal(props: {
 
   const q = attemptQs[idx];
 
-  const canNext = useMemo(() => locked && picked !== null && !failed && !finished, [locked, picked, failed, finished]);
+  const canNext = useMemo(
+    () => locked && picked !== null && !failed && !finished,
+    [locked, picked, failed, finished],
+  );
 
   if (!props.visible) return null;
 
   const onPick = (i: number) => {
     if (!q || locked || finished) return;
+    props.onSfxSelect?.();
     setPicked(i);
     setLocked(true);
 
     if (i === q.correctIndex) {
+      props.onSfxCorrect?.();
       const nextCorrect = correctCount + 1;
       setCorrectCount(nextCorrect);
       if (nextCorrect >= attemptQs.length) {
         setFinished(true);
       }
     } else {
+      props.onSfxWrong?.();
       setFailed(true);
     }
   };
@@ -107,7 +122,9 @@ export function QuizModal(props: {
         <div className={styles.header}>
           <div>
             <div className={styles.title}>{props.title}</div>
-            <div className={styles.muted}>Quiz • {attemptQs.length} câu • Lần thử: {attempts}</div>
+            <div className={styles.muted}>
+              Quiz • {attemptQs.length} câu • Lần thử: {attempts}
+            </div>
           </div>
           <button className={styles.close} onClick={props.onClose}>
             Đóng
@@ -122,7 +139,9 @@ export function QuizModal(props: {
               <div className={styles.muted}>
                 Câu {idx + 1}/{attemptQs.length} • Đúng: {correctCount}
               </div>
-              <div style={{ fontSize: 16, lineHeight: 1.5, marginTop: 6 }}>{q.prompt}</div>
+              <div style={{ fontSize: 16, lineHeight: 1.5, marginTop: 6 }}>
+                {q.prompt}
+              </div>
             </div>
 
             <div style={{ display: "grid", gap: 10 }}>
@@ -136,7 +155,11 @@ export function QuizModal(props: {
                 if (isWrongPick) cls.push(styles.btnDanger);
 
                 return (
-                  <button key={i} className={cls.join(" ")} onClick={() => onPick(i)}>
+                  <button
+                    key={i}
+                    className={cls.join(" ")}
+                    onClick={() => onPick(i)}
+                  >
                     {String.fromCharCode(65 + i)}. {c}
                   </button>
                 );
@@ -146,10 +169,14 @@ export function QuizModal(props: {
             {failed ? (
               <div style={{ display: "grid", gap: 10 }}>
                 <div className={styles.muted}>
-                  Bạn đã chọn sai. Theo luật chơi: làm lại từ đầu, đảo lại thứ tự câu hỏi & đáp án.
+                  Bạn đã chọn sai. Theo luật chơi: làm lại từ đầu, đảo lại thứ
+                  tự câu hỏi & đáp án.
                 </div>
                 <div className={styles.row}>
-                  <button className={`${styles.btn} ${styles.btnDanger}`} onClick={onRetry}>
+                  <button
+                    className={`${styles.btn} ${styles.btnDanger}`}
+                    onClick={onRetry}
+                  >
                     Làm lại
                   </button>
                 </div>
@@ -160,7 +187,10 @@ export function QuizModal(props: {
               <div style={{ display: "grid", gap: 10 }}>
                 <div>Chúc mừng! Bạn đã đúng toàn bộ.</div>
                 <div className={styles.row}>
-                  <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={onFinish}>
+                  <button
+                    className={`${styles.btn} ${styles.btnPrimary}`}
+                    onClick={onFinish}
+                  >
                     Hoàn thành
                   </button>
                 </div>
@@ -172,15 +202,17 @@ export function QuizModal(props: {
                 <button className={styles.btn} onClick={props.onClose}>
                   Thoát
                 </button>
-                <button className={`${styles.btn} ${styles.btnPrimary}`} disabled={!canNext} onClick={onNext}>
+                <button
+                  className={`${styles.btn} ${styles.btnPrimary}`}
+                  disabled={!canNext}
+                  onClick={onNext}
+                >
                   Câu tiếp theo
                 </button>
               </div>
             ) : null}
 
-            <div className={styles.muted}>
-              Dùng chuột trái để chọn đáp án.
-            </div>
+            <div className={styles.muted}>Dùng chuột trái để chọn đáp án.</div>
           </div>
         )}
       </div>

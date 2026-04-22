@@ -146,6 +146,34 @@ export class AudioSystem {
     osc.stop(t + durMs / 1000 + 0.02);
   }
 
+  private sweep(
+    startFreq: number,
+    endFreq: number,
+    durMs: number,
+    type: OscillatorType,
+    peak = 0.42,
+  ) {
+    if (!this.ctx || !this.sfxGain) return;
+    const t = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const g = this.ctx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(startFreq, t);
+    osc.frequency.exponentialRampToValueAtTime(
+      Math.max(1, endFreq),
+      t + durMs / 1000,
+    );
+
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(peak, t + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + durMs / 1000);
+
+    osc.connect(g);
+    g.connect(this.sfxGain);
+    osc.start(t);
+    osc.stop(t + durMs / 1000 + 0.02);
+  }
+
   playMoveStep() {
     this.blip(180, 40, "square");
   }
@@ -156,5 +184,20 @@ export class AudioSystem {
 
   playDoor() {
     this.blip(300, 120, "sawtooth");
+  }
+
+  playQuizSelect() {
+    this.blip(820, 28, "triangle");
+  }
+
+  playQuizCorrect() {
+    this.blip(784, 45, "triangle");
+    this.blip(988, 55, "triangle");
+    this.blip(1175, 90, "sine");
+  }
+
+  playQuizWrong() {
+    this.blip(196, 60, "square");
+    this.sweep(180, 120, 90, "sawtooth", 0.24);
   }
 }

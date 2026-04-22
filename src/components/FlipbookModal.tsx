@@ -3,14 +3,17 @@
 //UI
 import React, { useMemo, useState } from "react";
 import styles from "@/components/ui.module.css";
-import { FLIPBOOKS, type FlipbookId } from "@/data/flipbooks";
+import { FLIPBOOKS, type FlipbookId } from "../data/flipbooks";
 
 export function FlipbookModal(props: {
   visible: boolean;
   flipbookId: string;
   onClose: () => void;
 }) {
-  const book = useMemo(() => FLIPBOOKS[props.flipbookId as FlipbookId], [props.flipbookId]);
+  const book = useMemo(
+    () => FLIPBOOKS[props.flipbookId as FlipbookId],
+    [props.flipbookId],
+  );
   const [page, setPage] = useState(0);
 
   if (!props.visible) return null;
@@ -21,8 +24,16 @@ export function FlipbookModal(props: {
   const canPrev = page > 0;
   const canNext = page < pages.length - 1;
   const panelStyle = embedUrl
-    ? { width: "min(980px, calc(100vw - 24px))", maxHeight: "88vh", overflow: "auto" }
-    : { width: "min(820px, calc(100vw - 24px))", maxHeight: "88vh", overflow: "auto" };
+    ? {
+        width: "min(980px, calc(100vw - 24px))",
+        maxHeight: "88vh",
+        overflow: "auto",
+      }
+    : {
+        width: "min(820px, calc(100vw - 24px))",
+        maxHeight: "88vh",
+        overflow: "auto",
+      };
 
   return (
     <div className={styles.root}>
@@ -52,7 +63,13 @@ export function FlipbookModal(props: {
                 padding: 10,
               }}
             >
-              <div style={{ position: "relative", width: "100%", paddingTop: "62.5%" }}>
+              <div
+                style={{
+                  position: "relative",
+                  width: "100%",
+                  paddingTop: "62.5%",
+                }}
+              >
                 <iframe
                   src={embedUrl}
                   title={title}
@@ -79,19 +96,26 @@ export function FlipbookModal(props: {
                   padding: 14,
                   lineHeight: 1.6,
                   minHeight: 130,
+                  whiteSpace: "pre-line",
                 }}
               >
                 {pages[page] ?? "(Không có nội dung)"}
               </div>
 
               <div className={styles.row}>
-                <button className={styles.btn} disabled={!canPrev} onClick={() => setPage((p) => Math.max(0, p - 1))}>
+                <button
+                  className={styles.btn}
+                  disabled={!canPrev}
+                  onClick={() => setPage((p) => Math.max(0, p - 1))}
+                >
                   Trang trước
                 </button>
                 <button
                   className={`${styles.btn} ${styles.btnPrimary}`}
                   disabled={!canNext}
-                  onClick={() => setPage((p) => Math.min(pages.length - 1, p + 1))}
+                  onClick={() =>
+                    setPage((p) => Math.min(pages.length - 1, p + 1))
+                  }
                 >
                   Trang sau
                 </button>
@@ -99,7 +123,9 @@ export function FlipbookModal(props: {
             </>
           )}
 
-          <div className={styles.muted}>Mẹo: Đọc xong thì đóng để tiếp tục di chuyển.</div>
+          <div className={styles.muted}>
+            Mẹo: Đọc xong thì đóng để tiếp tục di chuyển.
+          </div>
         </div>
       </div>
     </div>

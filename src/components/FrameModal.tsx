@@ -1,9 +1,11 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import styles from "@/components/ui.module.css";
 
-const DEFAULT_FRAME_IMAGE = "https://i.pinimg.com/736x/af/1c/90/af1c90a42802cd8678988be18d47ee8e.jpg";
+const DEFAULT_FRAME_IMAGE =
+  "https://i.pinimg.com/736x/af/1c/90/af1c90a42802cd8678988be18d47ee8e.jpg";
 
 export function FrameModal(props: {
   visible: boolean;
@@ -31,9 +33,12 @@ export function FrameModal(props: {
         <div style={{ display: "grid", gap: 12 }}>
           <div className={styles.muted}>Ảnh phóng to để xem rõ hơn.</div>
           <div style={{ width: "100%", overflow: "auto", borderRadius: 12 }}>
-            <img
+            <Image
               src={imageSrc}
               alt={props.title}
+              width={1200}
+              height={800}
+              unoptimized
               style={{ display: "block", maxWidth: "100%", borderRadius: 12 }}
             />
           </div>

@@ -65,7 +65,10 @@ export class Game {
 
   constructor(init: GameInit) {
     this.canvas = init.canvas;
-    const ctx = this.canvas.getContext("2d", { alpha: false, desynchronized: true });
+    const ctx = this.canvas.getContext("2d", {
+      alpha: false,
+      desynchronized: true,
+    });
     if (!ctx) throw new Error("Canvas 2D not supported");
     this.ctx = ctx;
     this.callbacks = init.callbacks;
@@ -75,7 +78,6 @@ export class Game {
 
     this.mapBackgrounds = {
       1: this.loadMapBackground("/assets/MapBackground/map1.jpg"),
-      2: this.loadMapBackground("/assets/MapBackground/map2.jpg"),
       3: this.loadMapBackground("/assets/MapBackground/map3.jpg"),
     };
 
@@ -93,7 +95,9 @@ export class Game {
 
     window.addEventListener("keydown", this.input.onKeyDown, { passive: true });
     window.addEventListener("keyup", this.input.onKeyUp, { passive: true });
-    document.addEventListener("visibilitychange", this.onVisibility, { passive: true });
+    document.addEventListener("visibilitychange", this.onVisibility, {
+      passive: true,
+    });
   }
 
   private loadMapBackground(src: string) {
@@ -192,25 +196,17 @@ export class Game {
 
   advanceMap() {
     if (this.mapId === 1) {
-      this.mapId = 2;
-      this.player.setSpawn(360, 360);
-      this.confetti.burst(this.player.pos.x + 120, this.player.pos.y - 40, 60);
-      return;
-    }
-    if (this.mapId === 2) {
       this.mapId = 3;
       this.player.setSpawn(360, 360);
-      this.confetti.burst(this.player.pos.x + 120, this.player.pos.y - 40, 70);
+      this.confetti.burst(this.player.pos.x + 120, this.player.pos.y - 40, 60);
       return;
     }
   }
 
   retreatMap() {
     // Only allow going back to already-cleared maps.
-    if (this.mapId === 2) {
+    if (this.mapId === 3) {
       this.mapId = 1;
-    } else if (this.mapId === 3) {
-      this.mapId = 2;
     } else {
       return;
     }
@@ -266,15 +262,25 @@ export class Game {
     if (this.nearest && this.input.wasPressed("KeyE")) {
       if (this.nearest.type === "exhibit" && this.nearest.flipbookId) {
         this.callbacks.onSfxInteract();
-        this.callbacks.onRequestFlipbook(this.nearest.flipbookId, this.nearest.title);
+        this.callbacks.onRequestFlipbook(
+          this.nearest.flipbookId,
+          this.nearest.title,
+        );
       }
-      if ((this.nearest.type === "door" || this.nearest.type === "stage") && this.nearest.quizId) {
+      if (
+        (this.nearest.type === "door" || this.nearest.type === "stage") &&
+        this.nearest.quizId
+      ) {
         this.callbacks.onSfxDoor();
         this.callbacks.onRequestQuiz(this.nearest.quizId, this.nearest.title);
       }
       if (this.nearest.type === "frame") {
         this.callbacks.onSfxInteract();
-        this.callbacks.onRequestFrame(this.nearest.id, this.nearest.title, this.nearest.imageSrc);
+        this.callbacks.onRequestFrame(
+          this.nearest.id,
+          this.nearest.title,
+          this.nearest.imageSrc,
+        );
       }
     }
 
@@ -401,11 +407,16 @@ export class Game {
         ctx.fillRect(f.x - 10, f.y - 8, f.w + 20, f.h + 26);
         ctx.fillStyle = "#1f2937";
         ctx.fillRect(f.x, f.y, f.w, f.h);
-        ctx.strokeStyle = isNear ? `rgba(216,192,138,${0.55 + pulse * 0.25})` : "#d8c08a";
+        ctx.strokeStyle = isNear
+          ? `rgba(216,192,138,${0.55 + pulse * 0.25})`
+          : "#d8c08a";
         ctx.lineWidth = isNear ? 5 : 4;
         ctx.strokeRect(f.x, f.y, f.w, f.h);
 
-        if (!this.frameImages[f.id] || this.frameImages[f.id].src !== f.imageSrc) {
+        if (
+          !this.frameImages[f.id] ||
+          this.frameImages[f.id].src !== f.imageSrc
+        ) {
           this.frameImages[f.id] = this.loadMapBackground(f.imageSrc);
         }
         const img = this.frameImages[f.id];
@@ -439,12 +450,18 @@ export class Game {
     }
   }
 
-  private drawMapBackground(ctx: CanvasRenderingContext2D, map: { id: MapId; width: number; height: number }) {
+  private drawMapBackground(
+    ctx: CanvasRenderingContext2D,
+    map: { id: MapId; width: number; height: number },
+  ) {
     const img = this.mapBackgrounds[map.id];
     if (img && img.complete && img.naturalWidth > 0) {
       const prevSmoothing = ctx.imageSmoothingEnabled;
       ctx.imageSmoothingEnabled = true;
-      const scale = Math.max(map.width / img.naturalWidth, map.height / img.naturalHeight);
+      const scale = Math.max(
+        map.width / img.naturalWidth,
+        map.height / img.naturalHeight,
+      );
       const drawW = img.naturalWidth * scale;
       const drawH = img.naturalHeight * scale;
       const dx = (map.width - drawW) * 0.5;
@@ -468,7 +485,16 @@ export class Game {
       const pulse = isNear ? 0.5 + 0.5 * Math.sin(time * 6.0) : 0;
 
       if (it.type === "exhibit") {
-        this.drawExhibit(ctx, it.rect.x, it.rect.y, it.rect.w, it.rect.h, it.flipbookId ?? "", isNear, pulse);
+        this.drawExhibit(
+          ctx,
+          it.rect.x,
+          it.rect.y,
+          it.rect.w,
+          it.rect.h,
+          it.flipbookId ?? "",
+          isNear,
+          pulse,
+        );
 
         // label (neutral, academic)
         ctx.fillStyle = map.id === 1 ? "#1a10aa" : "#000000";
@@ -477,17 +503,41 @@ export class Game {
         ctx.textBaseline = "bottom";
         ctx.fillText(it.title, it.rect.x + it.rect.w * 0.5, it.rect.y - 8);
       } else if (it.type === "door") {
-        this.drawDoor(ctx, it.rect.x, it.rect.y, it.rect.w, it.rect.h, isNear, pulse);
+        this.drawDoor(
+          ctx,
+          it.rect.x,
+          it.rect.y,
+          it.rect.w,
+          it.rect.h,
+          isNear,
+          pulse,
+        );
         ctx.fillStyle = "rgb(21, 22, 24)";
         ctx.font = "bold 16px system-ui";
         ctx.textAlign = "center";
         ctx.textBaseline = "bottom";
-        ctx.fillText("Tầng tiếp theo", it.rect.x + it.rect.w * 0.5, it.rect.y + it.rect.h + 20);
+        ctx.fillText(
+          "Tầng tiếp theo",
+          it.rect.x + it.rect.w * 0.5,
+          it.rect.y + it.rect.h + 20,
+        );
       } else if (it.type === "stage") {
-        this.drawStage(ctx, it.rect.x, it.rect.y, it.rect.w, it.rect.h, isNear, pulse);
+        this.drawStage(
+          ctx,
+          it.rect.x,
+          it.rect.y,
+          it.rect.w,
+          it.rect.h,
+          isNear,
+          pulse,
+        );
         ctx.fillStyle = "#000000";
         ctx.font = "bold 16px system-ui";
-        ctx.fillText("Kết thúc", it.rect.x - it.rect.w * 0.05, it.rect.y + it.rect.h);
+        ctx.fillText(
+          "Kết thúc",
+          it.rect.x - it.rect.w * 0.05,
+          it.rect.y + it.rect.h,
+        );
       } else if (it.type === "frame") {
         // Frames are rendered in drawMuseum().
       }
@@ -524,7 +574,9 @@ export class Game {
     ctx.globalAlpha = 1;
 
     ctx.fillStyle = isNear ? "rgba(59,130,246,0.95)" : "rgba(59,130,246,0.85)";
-    ctx.strokeStyle = isNear ? `rgba(147,197,253,${0.6 + pulse01 * 0.25})` : "rgba(147,197,253,0.55)";
+    ctx.strokeStyle = isNear
+      ? `rgba(147,197,253,${0.6 + pulse01 * 0.25})`
+      : "rgba(147,197,253,0.55)";
     ctx.lineWidth = 4;
     ctx.beginPath();
     ctx.arc(0, 0, r, 0, Math.PI * 2);
@@ -618,7 +670,15 @@ export class Game {
     ctx.globalAlpha = 0.25;
     ctx.fillStyle = "#000";
     ctx.beginPath();
-    ctx.ellipse(x + shadowOffsetX, y + shadowOffsetY, shadowRadiusX, shadowRadiusY, 0, 0, Math.PI * 2);
+    ctx.ellipse(
+      x + shadowOffsetX,
+      y + shadowOffsetY,
+      shadowRadiusX,
+      shadowRadiusY,
+      0,
+      0,
+      Math.PI * 2,
+    );
     ctx.fill();
     ctx.globalAlpha = 1;
 
@@ -648,7 +708,13 @@ export class Game {
 
     ctx.fillStyle = "rgba(15,23,42,0.35)";
     ctx.beginPath();
-    ctx.roundRect(-bodyL * 0.5 - 1.5, -bodyW * 0.5 - 1.5, bodyL + 3, bodyW + 3, r + 2);
+    ctx.roundRect(
+      -bodyL * 0.5 - 1.5,
+      -bodyW * 0.5 - 1.5,
+      bodyL + 3,
+      bodyW + 3,
+      r + 2,
+    );
     ctx.fill();
 
     ctx.fillStyle = "#2563eb";
@@ -691,7 +757,11 @@ export class Game {
 
     ctx.font = "12px system-ui";
     ctx.fillStyle = "#334155";
-    ctx.fillText("Di chuyển: WASD/Phím mũi tên • Tương tác: E • Pause: Esc", 30, 50);
+    ctx.fillText(
+      "Di chuyển: WASD/Phím mũi tên • Tương tác: E • Pause: Esc",
+      30,
+      50,
+    );
 
     // interact hint
     if (this.nearest) {
@@ -716,7 +786,11 @@ export class Game {
       ctx.fillText("PAUSE", this.viewW / 2 - 42, this.viewH / 2);
       ctx.font = "14px system-ui";
       ctx.fillStyle = "#cbd5e1";
-      ctx.fillText("Nhấn Esc để tiếp tục", this.viewW / 2 - 70, this.viewH / 2 + 28);
+      ctx.fillText(
+        "Nhấn Esc để tiếp tục",
+        this.viewW / 2 - 70,
+        this.viewH / 2 + 28,
+      );
     }
   }
 }

@@ -1,7 +1,7 @@
 //SaveLoad
 import type { QuizId } from "@/data/questions";
 
-export type MapId = 1 | 2 | 3;
+export type MapId = 1 | 3;
 
 export type ScoreState = {
   totalTimeMs: number;
@@ -30,7 +30,7 @@ export function defaultScoreState(): ScoreState {
   };
 }
 
-export function defaultSave(playerName = "") : SaveStateV1 {
+export function defaultSave(playerName = ""): SaveStateV1 {
   return {
     v: 1,
     playerName,
@@ -54,20 +54,40 @@ export function loadSave(): SaveStateV1 | null {
   const raw = window.localStorage.getItem(KEY);
   if (!raw) return null;
   try {
-    const parsed = JSON.parse(raw) as SaveStateV1;
+    const parsed = JSON.parse(raw) as {
+      v?: unknown;
+      mapId?: number;
+      score?: unknown;
+      [key: string]: unknown;
+    };
     if (!parsed || parsed.v !== 1) return null;
-    const score = parsed.score as unknown as Partial<ScoreState> & {
+
+    // Migrate legacy map id 2 to current map id 3.
+    if (parsed.mapId === 2) {
+      parsed.mapId = 3;
+    }
+    if (parsed.mapId !== 1 && parsed.mapId !== 3) {
+      parsed.mapId = 1;
+    }
+
+    const normalized = parsed as SaveStateV1;
+    const score = normalized.score as unknown as Partial<ScoreState> & {
       sideTotalTimeMs?: number;
       sideAttempts?: number;
       mainTotalTimeMs?: number;
       mainAttempts?: number;
     };
-    if (score && (typeof score.totalTimeMs !== "number" || typeof score.attempts !== "number")) {
-      const totalTimeMs = (score.sideTotalTimeMs ?? 0) + (score.mainTotalTimeMs ?? 0);
+    if (
+      score &&
+      (typeof score.totalTimeMs !== "number" ||
+        typeof score.attempts !== "number")
+    ) {
+      const totalTimeMs =
+        (score.sideTotalTimeMs ?? 0) + (score.mainTotalTimeMs ?? 0);
       const attempts = (score.sideAttempts ?? 0) + (score.mainAttempts ?? 0);
-      parsed.score = { totalTimeMs, attempts };
+      normalized.score = { totalTimeMs, attempts };
     }
-    return parsed;
+    return normalized;
   } catch {
     return null;
   }
