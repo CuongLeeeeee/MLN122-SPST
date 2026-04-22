@@ -467,10 +467,9 @@ export default function AcademicIntegrityPage() {
   const [activeSection, setActiveSection] = React.useState<number>(1);
 
   const sections = [
-    { id: 1, title: "Công cụ AI", icon: "🤖" },
-    { id: 2, title: "Kiểm chứng nguồn", icon: "📚" },
-    { id: 3, title: "Ứng dụng sáng tạo", icon: "💡" },
-    { id: 4, title: "Cam kết liêm chính", icon: "✓" },
+    { id: 1, title: "Kiểm chứng nguồn", icon: "📚" },
+    { id: 2, title: "Ứng dụng sáng tạo", icon: "💡" },
+    { id: 3, title: "Cam kết liêm chính", icon: "✓" },
   ];
 
   // Override body overflow for this page
@@ -517,10 +516,9 @@ export default function AcademicIntegrityPage() {
       </nav>
 
       <main className={styles.pageContent}>
-        {activeSection === 1 && <Section1_AITools />}
-        {activeSection === 2 && <Section2_SourceVerification />}
-        {activeSection === 3 && <Section3_CreativeApplication />}
-        {activeSection === 4 && <Section4_IntegrityCommitment />}
+        {activeSection === 1 && <Section2_SourceVerification />}
+        {activeSection === 2 && <Section3_CreativeApplication />}
+        {activeSection === 3 && <Section4_IntegrityCommitment />}
       </main>
 
       <footer className={styles.pageFooter}>

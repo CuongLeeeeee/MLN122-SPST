@@ -13,4 +13,5 @@ export type Interactable = {
   flipbookId?: string;
   quizId?: QuizId;
   imageSrc?: string;
+  titleColor?: string;
 };

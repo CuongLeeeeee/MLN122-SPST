@@ -497,7 +497,7 @@ export class Game {
         );
 
         // label (neutral, academic)
-        ctx.fillStyle = map.id === 1 ? "#1a10aa" : "#000000";
+        ctx.fillStyle = it.titleColor ?? (map.id === 1 ? "#1a10aa" : "#000000");
         ctx.font = "bold 18px system-ui";
         ctx.textAlign = "center";
         ctx.textBaseline = "bottom";
@@ -512,7 +512,7 @@ export class Game {
           isNear,
           pulse,
         );
-        ctx.fillStyle = "rgb(21, 22, 24)";
+        ctx.fillStyle = "#ff0000";
         ctx.font = "bold 16px system-ui";
         ctx.textAlign = "center";
         ctx.textBaseline = "bottom";
@@ -531,7 +531,7 @@ export class Game {
           isNear,
           pulse,
         );
-        ctx.fillStyle = "#000000";
+        ctx.fillStyle = "#ff0000";
         ctx.font = "bold 16px system-ui";
         ctx.fillText(
           "Kết thúc",
