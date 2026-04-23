@@ -85,7 +85,7 @@ export const FLIPBOOKS: Record<FlipbookId, Flipbook> = {
   },
   "m1-to-chuc": {
     id: "m1-to-chuc",
-    title: "Mối quan hệ dân chủ xã hội chủ nghĩa và nhà nước xã hội chủ nghĩa",
+    title: "Quá trình nhận thức của Đảng",
     pages: [],
     embedUrl: "https://heyzine.com/flip-book/fa9141b009.html",
   },
@@ -114,13 +114,13 @@ export const FLIPBOOKS: Record<FlipbookId, Flipbook> = {
   },
   "m3-tong-ket1": {
     id: "m3-tong-ket1",
-    title: "Tổng kết",
+    title: "Tính tất yếu khách quan",
     pages: [],
     embedUrl: "https://heyzine.com/flip-book/37e51d7abf.html",
   },
   "m3-tong-ket2": {
     id: "m3-tong-ket2",
-    title: "Tổng kết",
+    title: "Tính tất yếu khách quan",
     pages: [],
     embedUrl: "https://heyzine.com/flip-book/b3b3b6ae32.html",
   },

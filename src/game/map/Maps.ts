@@ -31,6 +31,7 @@ function exhibit(
   y: number,
   title: string,
   flipbookId: FlipbookId,
+  titleColor?: string,
 ): Interactable {
   return {
     id,
@@ -39,6 +40,7 @@ function exhibit(
     title,
     hint: "Nhấn E để xem flipbook",
     flipbookId,
+    titleColor,
   };
 }
 
@@ -90,16 +92,18 @@ export function buildMaps(): Record<MapId, MapDef> {
     exhibit(
       "m1-e3",
       580,
-      750,
+      718,
       "Kinh tế thị trường định hướng xã hội chủ nghĩa ở Việt Nam",
       "m1-phap-luat",
+      "#ff0000",
     ),
     exhibit(
       "m1-e4",
       1700,
-      750,
-      "Mối quan hệ dân chủ xã hội chủ nghĩa và nhà nước xã hội chủ nghĩa",
+      718,
+      "Quá trình nhẫn thức của Đảng",
       "m1-to-chuc",
+      "#ff0000",
     ),
   ];
   for (const it of m1Exhibits)
@@ -121,7 +125,7 @@ export function buildMaps(): Record<MapId, MapDef> {
 
   // Map 3 exhibits (avoid top wall frames)
   const m3Exhibits: Interactable[] = [
-    exhibit("m3-e1", 600, 720, "Ôn tập nhanh", "m3-tong-ket1"),
+    exhibit("m3-e1", 600, 688, "Tính tất yếu khách quan", "m3-tong-ket1", "#ff0000"),
     exhibit("m3-e2", 1650, 720, "Làm bài tập luyện", "m3-kho-de"),
   ];
   for (const it of m3Exhibits)
