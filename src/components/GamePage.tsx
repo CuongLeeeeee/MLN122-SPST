@@ -399,7 +399,7 @@ export function GamePage() {
         <div className={styles.debugBadge}>DEBUG: Skip quiz</div>
       ) : null}
 
-      {started ? (
+      {/* {started ? (
         <Link
           href="/academic-integrity"
           className={styles.integrityBtn}
@@ -407,7 +407,7 @@ export function GamePage() {
         >
           📋 Liêm chính học thuật
         </Link>
-      ) : null}
+      ) : null} */}
 
       <StartOverlay
         key={`${saveExists ? "1" : "0"}-${save?.playerName ?? ""}`}
