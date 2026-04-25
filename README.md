@@ -1,6 +1,6 @@
-# Bảo tàng lịch sử
+# Khám phá bảo tàng kinh tế
 
-Một chuyến tham quan bảo tàng lịch sử theo phong cách game 2D. Bạn sẽ đi dạo qua các phòng trưng bày, dừng lại trước những hiện vật nổi bật, đọc thông tin tóm tắt và trả lời câu hỏi để mở khóa khu vực tiếp theo. Mỗi lần hoàn thành quiz, game ghi lại tổng thời gian và số lần thử để tạo nên “điểm tham quan” cuối cùng.
+Một chuyến tham quan khám phá bảo tàng kinh tế theo phong cách game 2D. Bạn sẽ đi dạo qua các phòng trưng bày, dừng lại trước những hiện vật nổi bật, đọc thông tin tóm tắt và trả lời câu hỏi để mở khóa khu vực tiếp theo. Mỗi lần hoàn thành quiz, game ghi lại tổng thời gian và số lần thử để tạo nên “điểm tham quan” cuối cùng.
 
 ## Trải nghiệm dành cho người chơi
 - **Khám phá theo tuyến**: di chuyển qua nhiều phòng, mỗi phòng có nội dung trưng bày riêng.

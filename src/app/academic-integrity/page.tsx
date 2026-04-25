@@ -491,7 +491,7 @@ export default function AcademicIntegrityPage() {
         <div className={styles.headerContent}>
           <h1 className={styles.pageTitle}>Liêm chính Học thuật</h1>
           <p className={styles.pageSubtitle}>
-            Bảo tàng Lịch sử - Game học tập về Dân chủ xã hội chủ nghĩa và nhà
+            Khám phá bảo tàng kinh tế - Game học tập về Dân chủ xã hội chủ nghĩa và nhà
             nước xã hội chủ nghĩa
           </p>
           <p className={styles.courseName}>

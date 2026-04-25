@@ -26,7 +26,7 @@ export function StartOverlay(props: {
       <div className={styles.backdrop} />
       <div className={styles.panel}>
         <div className={styles.header}>
-          <div className={styles.title}>Bảo tàng lịch sử</div>
+          <div className={styles.title}>Khám phá bảo tàng kinh tế</div>
           <div className={styles.muted}>Canvas 2D • NextJS + TS</div>
         </div>
 

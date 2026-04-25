@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Bảo tàng lịch sử",
+  title: "Khám phá bảo tàng kinh tế",
   description:
     "Web-game Canvas 2D: Nhà nước xã hội chủ nghĩa & Dân chủ xã hội chủ nghĩa (NextJS + TypeScript)",
 };
