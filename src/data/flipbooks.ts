@@ -79,7 +79,7 @@ export const FLIPBOOKS: Record<FlipbookId, Flipbook> = {
   },
   "m1-phap-luat": {
     id: "m1-phap-luat",
-    title: "Nguồn gốc chủ nghĩa xã hội",
+    title: "Kinh tế thị trường định hướng XHCN",
     pages: [],
     embedUrl: "https://heyzine.com/flip-book/8f1f85a8dd.html",
   },
