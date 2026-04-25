@@ -22,7 +22,7 @@ export function HelpModal(props: { visible: boolean; onClose: () => void }) {
           <div>
             - Di chuyển tự do quanh bảo tàng, đọc nội dung ở các bục trưng bày
             (flipbook).
-            <br />- Đi tới cửa (màn 1) hoặc sân khấu (màn 3) để làm quiz.
+            <br />- Đi tới cửa (màn 1) hoặc  (màn 2) để ôn tập và làm quiz.
             <br />- Quiz: đúng toàn bộ mới qua màn; sai bất kỳ câu nào sẽ phải
             làm lại từ đầu (đảo lại thứ tự).
             <br />- Trong Pause có nút <b>Quay lại màn trước</b> để quay về màn
