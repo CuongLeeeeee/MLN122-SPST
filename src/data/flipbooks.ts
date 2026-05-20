@@ -79,13 +79,13 @@ export const FLIPBOOKS: Record<FlipbookId, Flipbook> = {
   },
   "m1-phap-luat": {
     id: "m1-phap-luat",
-    title: "Nguồn gốc chủ nghĩa xã hội",
+    title: "Kinh tế thị trường định hướng xã hội chủ nghĩa ở Việt Nam",
     pages: [],
     embedUrl: "https://heyzine.com/flip-book/8f1f85a8dd.html",
   },
   "m1-to-chuc": {
     id: "m1-to-chuc",
-    title: "Quá trình nhận thức của Đảng",
+    title: "Quá trình đổi mới qua từng giai đoạn lịch sử của Nhà nước Việt Nam",
     pages: [],
     embedUrl: "https://heyzine.com/flip-book/fa9141b009.html",
   },
